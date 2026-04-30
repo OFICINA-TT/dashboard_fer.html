@@ -9,15 +9,15 @@
         /* # 1. VARIABLES DE COLORES GLOBALES                          # */
         /* # ========================================================= # */
         :root {
-            --bg-dark: #f1f5f9;     /* Fondo principal gris muy claro */
-            --bg-card: #ffffff;     /* Tarjetas blancas */
-            --text-main: #1e293b;   /* Texto principal gris oscuro */
-            --text-muted: #64748b;  /* Texto secundario */
-            --accent-blue: #2563eb; /* Azul corporativo */
-            --accent-green: #059669;/* Verde clásico */
+            --bg-dark: #f1f5f9;     
+            --bg-card: #ffffff;     
+            --text-main: #1e293b;   
+            --text-muted: #64748b;  
+            --accent-blue: #2563eb; 
+            --accent-green: #059669;
             --accent-purple: #7c3aed;
             --accent-red: #dc2626;  
-            --border: #e2e8f0;      /* Bordes suaves */
+            --border: #e2e8f0;      
             
             --cat-cata: #0284c7; --cat-drone: #6d28d9; --cat-pers: #047857;
             --cat-fam: #c2410c; --cat-ami: #b45309; --cat-elfa: #ea580c;
@@ -25,41 +25,51 @@
         }
 
         /* # ========================================================= # */
-        /* # 2. ESTILOS GENERALES Y ESTRUCTURA                         # */
+        /* # 2. ESTRUCTURA PRINCIPAL Y BARRA LATERAL (Responsive)      # */
         /* # ========================================================= # */
-        body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; flex-direction: column; }
+        body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg-dark); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
         
-        /* HEADER MÓVIL (Solo visible en celulares) */
-        .mobile-header { display: none; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: var(--bg-card); border-bottom: 1px solid var(--border); z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.05);}
-        .mobile-header h2 { margin: 0; font-size: 18px; color: var(--accent-blue); letter-spacing: 1px; }
-        .menu-toggle { background: transparent; border: none; color: var(--text-main); font-size: 24px; cursor: pointer; padding: 0; }
-
-        /* Estructura Principal (Flex direction row on Desktop) */
-        .app-container { display: flex; flex: 1; overflow: hidden; position: relative; }
-
-        .sidebar { width: 260px; background-color: var(--bg-card); border-right: 1px solid var(--border); padding: 30px 20px; display: flex; flex-direction: column; gap: 15px; z-index: 200; overflow-y: auto;}
-        .sidebar h2 { margin: 0 0 20px 0; font-size: 20px; letter-spacing: 1px; color: var(--accent-blue); }
+        /* Barra Lateral */
+        .sidebar { 
+            width: 260px; min-width: 260px; background-color: var(--bg-card); border-right: 1px solid var(--border); 
+            padding: 25px 20px; display: flex; flex-direction: column; gap: 12px; z-index: 200; 
+            transition: margin-left 0.3s ease; overflow-y: auto;
+        }
+        .sidebar.collapsed { margin-left: -300px; } /* Minimizar en PC */
+        
+        .sidebar h2 { margin: 0 0 15px 0; font-size: 20px; letter-spacing: 1px; color: var(--accent-blue); }
         .btn-close-sidebar { display: none; text-align: right; background: transparent; border: none; font-size: 20px; color: var(--text-muted); cursor: pointer; margin-bottom: 10px; }
         
         .nav-btn { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 12px 15px; border-radius: 8px; text-align: left; font-size: 15px; cursor: pointer; transition: 0.2s; font-weight: 600; }
         .nav-btn:hover { background-color: rgba(37, 99, 235, 0.05); color: var(--text-main); }
         .nav-btn.active { background-color: rgba(37, 99, 235, 0.1); color: var(--accent-blue); border: 1px solid var(--accent-blue); }
         
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        /* Contenedor Derecho (Top Nav + Vistas) */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+        
+        /* Barra Superior Universal */
+        .top-nav { background-color: var(--bg-card); border-bottom: 1px solid var(--border); padding: 12px 30px; display: flex; align-items: center; gap: 15px; z-index: 100; }
+        .menu-toggle { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); font-size: 18px; cursor: pointer; padding: 6px 12px; border-radius: 6px; transition: 0.2s; }
+        .menu-toggle:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+        
+        /* Área de Contenido */
+        .main-content { flex: 1; padding: 35px 40px; overflow-y: auto; }
         .view { display: none; animation: fadeIn 0.3s ease-in-out; }
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         h1 { margin-top: 0; font-size: 28px; border-bottom: 2px solid var(--border); padding-bottom: 15px; }
 
-        /* Overlay para oscurecer el fondo en móvil cuando el menú está abierto */
+        /* Overlay para celular */
         .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 150; opacity: 0; transition: opacity 0.3s; }
         .sidebar-overlay.active { display: block; opacity: 1; }
 
         /* # ========================================================= # */
-        /* # 3. ESTILOS FINANZAS: MODERN SAAS (Elegante y Limpio)      # */
+        /* # 3. ESTILOS FINANZAS (GRILLAS DINÁMICAS AUTO-FIT)          # */
         /* # ========================================================= # */
-        .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; margin-top: 25px; }
-        .card { background-color: var(--bg-card); border-radius: 16px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); transition: transform 0.2s ease; }
+        /* Auto-fit soluciona el problema de que las tarjetas se corten */
+        .finance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 25px; }
+        
+        .card { background-color: var(--bg-card); border-radius: 16px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); transition: transform 0.2s ease; }
         .card:hover { transform: translateY(-3px); }
         .card h3 { margin-top: 0; margin-bottom: 25px; font-size: 20px; display: flex; align-items: center; gap: 10px; }
         .card.mama h3 { color: var(--accent-green); }
@@ -69,7 +79,7 @@
         .input-group label { font-size: 14px; color: var(--text-muted); text-transform: capitalize; font-weight: 500;}
         .input-group input { background-color: var(--bg-dark); border: 1px solid transparent; color: var(--text-main); padding: 10px 14px; border-radius: 8px; width: 130px; text-align: right; font-family: monospace; font-size: 15px; transition: all 0.2s ease; }
         .input-group input[type="text"] { text-align: left; width: 160px; }
-        .input-group input:focus { border-color: var(--accent-blue); background-color: rgba(37, 99, 235, 0.05); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
+        .input-group input:focus { border-color: var(--accent-blue); background-color: rgba(37, 99, 235, 0.05); }
         
         .extra-section { margin-top: 25px; padding-top: 20px; border-top: 2px dashed var(--border); }
         .extra-section h4 { margin: 0 0 15px 0; color: var(--accent-purple); font-size: 14px; text-transform: uppercase; letter-spacing: 1px;}
@@ -82,23 +92,23 @@
         .hidden { display: none !important; }
         
         .progress-container { width: 100%; background-color: var(--border); border-radius: 10px; margin-top: 10px; overflow: hidden; height: 16px; border: none;}
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-blue), #60a5fa); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--accent-blue), #60a5fa); width: 0%; transition: width 0.6s ease; border-radius: 10px; }
         
-        .summary-container { display: flex; flex-direction: column; gap: 25px; margin-top: 40px; }
+        .summary-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-top: 40px; }
         .summary-panel { background: var(--bg-card); padding: 30px; border-radius: 16px; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.1); border: 1px solid var(--border); position: relative; overflow: hidden;}
         .summary-panel::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 6px; }
         .summary-panel.mama::before { background-color: var(--accent-green); }
         .summary-panel.fer::before { background-color: var(--accent-purple); }
         .summary-panel h3 { margin-top: 0; margin-bottom: 25px; font-size: 18px; color: var(--text-main); letter-spacing: 1px; }
-        .summary-grid { display: flex; justify-content: space-between; align-items: flex-end;}
+        .summary-grid { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 15px;}
         .summary-box { text-align: left; }
         .summary-box p { margin: 0 0 8px 0; color: var(--text-muted); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600;}
-        .summary-box h2 { margin: 0; font-size: 26px; font-family: 'Courier New', Courier, monospace; color: var(--text-main); font-weight: bold;}
+        .summary-box h2 { margin: 0; font-size: 26px; font-family: monospace; color: var(--text-main); font-weight: bold;}
         .summary-box.positive h2 { color: var(--accent-green); }
         .summary-box.blue h2 { color: var(--accent-blue); }
 
         /* # ========================================================= # */
-        /* # 4. ESTILOS DEL PLANNER Y TIME-BLOCKING                    # */
+        /* # 4. ESTILOS DEL PLANNER (GRILLAS DINÁMICAS AUTO-FIT)       # */
         /* # ========================================================= # */
         .planner-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; flex-wrap: wrap; gap: 15px;}
         .time-tabs { display: flex; gap: 5px; background: var(--border); padding: 4px; border-radius: 8px; flex-wrap: wrap;}
@@ -114,13 +124,17 @@
         
         .timeline-section { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; }
         .timeline-section h3 { margin: 0 0 15px 0; font-size: 16px; color: var(--accent-purple); }
-        .timeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        
+        /* Auto-fit para el Mapeo de Inspiración (Evita el corte de las horas) */
+        .timeline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
         .hour-row { display: flex; align-items: center; gap: 8px; background: var(--bg-dark); padding: 6px 10px; border-radius: 6px; border: 1px solid transparent; transition: 0.2s;}
         .hour-row:focus-within { border-color: var(--accent-blue); background: var(--bg-card); }
         .hour-row span { font-size: 12px; font-weight: bold; color: var(--accent-blue); width: 40px; }
         .hour-row input { flex: 1; background: transparent; border: none; color: var(--text-main); font-size: 13px; outline: none; }
 
-        .planner-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        /* Auto-fit para las Tarjetas de Tareas */
+        .planner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
+        
         .cat-board { background: var(--bg-dark); border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; height: 380px; }
         .cat-header { padding: 12px 15px; font-weight: bold; font-size: 14px; background: var(--bg-card); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);}
         
@@ -138,7 +152,7 @@
         .task-item:hover { border-color: var(--accent-blue); }
         .task-item input[type="checkbox"] { margin-top: 3px; accent-color: var(--accent-green); cursor: pointer; flex-shrink: 0; width: 16px; height: 16px;}
         
-        .task-details { display: flex; flex-direction: column; flex: 1; gap: 4px; }
+        .task-details { display: flex; flex-direction: column; flex: 1; gap: 4px; word-break: break-word;}
         .task-item.completed .task-details span.t-text { text-decoration: line-through; color: var(--text-muted); }
         .t-date { font-size: 10px; color: var(--accent-red); font-weight: bold; background: rgba(220, 38, 38, 0.1); padding: 3px 6px; border-radius: 4px; display: inline-block; width: max-content; }
         
@@ -146,39 +160,25 @@
         .task-item:hover .btn-delete-task { opacity: 1; color: var(--accent-red); }
 
         .add-task-form { padding: 10px; border-top: 1px solid var(--border); background: var(--bg-card); display: flex; gap: 5px; align-items: stretch;}
-        .add-task-inputs { display: flex; flex-direction: column; gap: 5px; flex: 1; }
+        .add-task-inputs { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 0;}
         .add-task-inputs input { background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); border-radius: 6px; padding: 8px; font-size: 12px; outline: none;}
         .add-task-inputs input:focus { border-color: var(--accent-blue); }
         .add-task-form button { background: var(--accent-blue); border: none; color: white; border-radius: 6px; padding: 0 12px; cursor: pointer; font-weight: bold; transition: 0.2s;}
         .add-task-form button:hover { opacity: 0.9; }
 
         /* # ========================================================= # */
-        /* # 5. RESPONSIVE DESIGN (MEDIA QUERIES PARA CELULAR)         # */
+        /* # 5. RESPONSIVE DESIGN PARA CELULARES                       # */
         /* # ========================================================= # */
         @media (max-width: 850px) {
-            body { flex-direction: column; }
-            .mobile-header { display: flex; }
-            
-            /* Ajustes de la Barra Lateral en Móvil */
-            .sidebar { position: absolute; top: 0; left: -300px; height: 100vh; transition: left 0.3s ease; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
+            .sidebar { position: absolute; top: 0; left: -300px; height: 100vh; margin-left: 0; transition: left 0.3s ease; box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
             .sidebar.open { left: 0; }
-            .sidebar h2 { display: none; } /* Ocultar h2 porque ya está en el header */
             .btn-close-sidebar { display: block; }
-            
             .main-content { padding: 20px; }
-            
-            /* Convertir todas las grillas en filas de 1 sola columna */
-            .finance-grid, .planner-grid, .timeline-grid { grid-template-columns: 1fr; gap: 20px;}
-            
-            /* Ajustes de Inputs en Móvil para que quepan bien */
-            .input-group { flex-direction: column; align-items: flex-start; gap: 8px; border-bottom: none; background: var(--bg-dark); padding: 10px; border-radius: 8px; margin-bottom: 10px;}
+            .top-nav { padding: 12px 20px; }
+            .input-group { flex-direction: column; align-items: flex-start; gap: 8px; border-bottom: none; background: var(--bg-dark); padding: 10px; border-radius: 8px;}
             .input-group input, .input-group input[type="text"] { width: 100%; box-sizing: border-box; }
-            
-            .summary-grid { flex-direction: column; gap: 15px; align-items: flex-start;}
             .sav-row { flex-direction: column; gap: 5px; }
             .sav-row input[type="text"], .sav-row input[type="number"] { width: 100%; box-sizing: border-box; }
-            
-            /* Ajustes Planner en Móvil */
             .cat-board { height: auto; min-height: 250px; max-height: 400px; }
             .planner-header { flex-direction: column; align-items: flex-start; }
             .time-tabs { width: 100%; justify-content: space-between; }
@@ -188,25 +188,26 @@
 </head>
 <body>
 
-    <!-- # HEADER MÓVIL (Solo visible en pantallas pequeñas) # -->
-    <div class="mobile-header">
+    <!-- # ESTRUCTURA PRINCIPAL # -->
+    <!-- OVERLAY MÓVIL -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- MENÚ LATERAL -->
+    <div class="sidebar" id="sidebar">
+        <button class="btn-close-sidebar" onclick="toggleSidebar()">✖</button>
         <h2>⚙️ LIFE OS</h2>
-        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <button class="nav-btn active" onclick="switchView('finanzas', this)">💰 Finanzas (15 Meses)</button>
+        <button class="nav-btn" onclick="switchView('inmobiliario', this)">🏢 Control Inmobiliario</button>
+        <button class="nav-btn" onclick="switchView('planner', this)">📅 Planner & Rendimiento</button>
     </div>
 
-    <!-- # CONTENEDOR PRINCIPAL # -->
-    <div class="app-container">
+    <!-- CONTENEDOR DE VISTAS (Lado Derecho) -->
+    <div class="main-wrapper">
         
-        <!-- # OVERLAY PARA CERRAR EL MENÚ EN MÓVIL # -->
-        <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-
-        <!-- # MENÚ LATERAL # -->
-        <div class="sidebar" id="sidebar">
-            <button class="btn-close-sidebar" onclick="toggleSidebar()">✖</button>
-            <h2>⚙️ LIFE OS</h2>
-            <button class="nav-btn active" onclick="switchView('finanzas', this)">💰 Finanzas (15 Meses)</button>
-            <button class="nav-btn" onclick="switchView('inmobiliario', this)">🏢 Control Inmobiliario</button>
-            <button class="nav-btn" onclick="switchView('planner', this)">📅 Planner & Rendimiento</button>
+        <!-- BARRA SUPERIOR UNIVERSAL (Botón Menú) -->
+        <div class="top-nav">
+            <button class="menu-toggle" onclick="toggleSidebar()" title="Ocultar/Mostrar Menú">☰</button>
+            <span style="font-weight: 600; color: var(--accent-blue); letter-spacing: 1px;">Dashboard Principal</span>
         </div>
 
         <div class="main-content">
@@ -351,13 +352,22 @@
     <!-- # MOTOR JAVASCRIPT                          # -->
     <!-- # ========================================= # -->
     <script>
-        // --- 1. MENÚ MÓVIL ---
+        // --- 1. LÓGICA DEL MENÚ LATERAL (PC Y MÓVIL) ---
         function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('open');
-            document.getElementById('sidebarOverlay').classList.toggle('active');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            // Si es celular
+            if (window.innerWidth <= 850) {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            } else {
+                // Si es computador, minimiza hacia la izquierda
+                sidebar.classList.toggle('collapsed');
+            }
         }
 
-        // Modificamos switchView para que cierre el menú en celular al hacer clic
+        // Cierra el menú al cambiar de pestaña si estás en celular
         function switchView(vId, btnElement) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -365,7 +375,6 @@
             
             if(btnElement) btnElement.classList.add('active');
             
-            // Si está en celular, cierra la barra lateral
             if (window.innerWidth <= 850) {
                 document.getElementById('sidebar').classList.remove('open');
                 document.getElementById('sidebarOverlay').classList.remove('active');
